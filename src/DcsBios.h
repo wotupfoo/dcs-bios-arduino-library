@@ -110,7 +110,7 @@ do not come with their own build system, we are just putting everything into the
 // Note, the instructions are old, don't put it in ~/Documents/Arduino/hardware
 // Put it in ~/Sketches/hardware/
 // See github Issue: https://github.com/rogerclarkmelbourne/Arduino_STM32/issues/939
-#include "USBCompositeSerial.h"
+#include <USBComposite.h>
 	namespace DcsBios {
 		ProtocolParser parser;
 		void setup() {
