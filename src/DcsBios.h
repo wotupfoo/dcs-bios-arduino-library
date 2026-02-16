@@ -40,11 +40,10 @@ To make sure these defines are visible when compiling the code, we can't put it 
 Normally, those #defines would go in a separate "config.h" or you would use compiler flags. But since Arduino libraries
 do not come with their own build system, we are just putting everything into the header file.
 */
-#ifdef DCSBIOS_RS485_MASTER
+#if defined(DCSBIOS_RS485_MASTER)
 	#include "internal/DcsBiosNgRS485Master.h"
 	#include "internal/DcsBiosNgRS485Master.cpp.inc"
-#endif
-#ifdef DCSBIOS_RS485_SLAVE
+#elif defined(DCSBIOS_RS485_SLAVE)
 	#if defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega1280__)
 		#include "internal/UART.Mod/DcsBiosNgRS485Slave.h"
 		#include "internal/UART.Mod/DcsBiosNgRS485Slave.cpp.inc"
@@ -52,13 +51,10 @@ do not come with their own build system, we are just putting everything into the
 		#include "internal/DcsBiosNgRS485Slave.h"
 		#include "internal/DcsBiosNgRS485Slave.cpp.inc"
 	#endif
-#endif
-#ifdef DCSBIOS_ESP32_WIFI
+#elif defined(DCSBIOS_ESP32_WIFI)
 	#include "internal/ESP32WiFi/DcsBiosESP32WiFiSlave.h"
 	#include "internal/ESP32WiFi/DcsBiosESP32WiFiSlave.cpp.inc"
-#endif
-#ifdef DCSBIOS_IRQ_SERIAL
-
+#elif defined(DCSBIOS_IRQ_SERIAL)
 	namespace DcsBios {
 		ProtocolParser parser;
 
@@ -103,8 +99,42 @@ do not come with their own build system, we are just putting everything into the
 			return true;
 		}
 	}
-#endif
-#ifdef DCSBIOS_DEFAULT_SERIAL
+#elif defined(DCSBIOS_USBCOMPOSITE_STM32F1_SERIAL)
+// Requires https://github.com/arpruss/USBComposite_stm32f1
+// Which is now bundled in the STM32F1 Board support, so just install this
+// since you need it for the Board Support Package anyhow
+// You also need to install the Atmel SAM (Cortex-C) Board Toolchain to get
+// the gcc suite
+// See instructions here:
+// https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation
+// Note, the instructions are old, don't put it in ~/Documents/Arduino/hardware
+// Put it in ~/Sketches/hardware/
+// See github Issue: https://github.com/rogerclarkmelbourne/Arduino_STM32/issues/939
+#include "USBCompositeSerial.h"
+	namespace DcsBios {
+		ProtocolParser parser;
+		void setup() {
+		}
+		void loop() {
+			while (CompositeSerial.available()) {
+				parser.processChar(CompositeSerial.read());
+			}
+			PollingInput::pollInputs();
+			ExportStreamListener::loopAll();			
+		}
+		bool tryToSendDcsBiosMessage(const char* msg, const char* arg) {
+			CompositeSerial.write(msg); 
+			CompositeSerial.write(' '); 
+			CompositeSerial.write(arg); 
+			CompositeSerial.write('\n');
+			DcsBios::PollingInput::setMessageSentOrQueued();
+			return true;
+		}
+		void resetAllStates() {
+			PollingInput::resetAllStates();
+		}
+	}
+#elif defined(DCSBIOS_DEFAULT_SERIAL)
 	namespace DcsBios {
 		ProtocolParser parser;
 		void setup() {
@@ -126,6 +156,8 @@ do not come with their own build system, we are just putting everything into the
 			PollingInput::resetAllStates();
 		}
 	}
+#else
+#error You must define one of DCSBIOS_DEFAULT_SERIAL, DCSBIOS_USBCOMPOSITE_STM32F1_SERIAL, DCSBIOS_IRQ_SERIAL, DCSBIOS_ESP32_WIFI, DCSBIOS_RS485_MASTER, DCSBIOS_RS485_SLAVE
 #endif
 
 #include "internal/Buttons.h"
