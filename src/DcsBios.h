@@ -101,11 +101,12 @@ do not come with their own build system, we are just putting everything into the
 	}
 #elif defined(DCSBIOS_USBCOMPOSITE_STM32F1_SERIAL)
 // Requires https://github.com/arpruss/USBComposite_stm32f1
-// Which is now bundled in the STM32F1 Board support, so just install this
-// since you need it for the Board Support Package anyhow
-// You also need to install the Atmel SAM (Cortex-C) Board Toolchain to get
-// the gcc suite
-// See instructions here:
+// Which is now bundled in the RogerClark STM32F1 Board support,
+// so just install that since you need it for the Board Support Package anyhow
+// USBComposite is in
+// .\hardware\Arduino_STM32\STM32F1\libraries\USBComposite
+// NOTE:- You also need to install the Atmel SAM (Cortex-C) Board Toolchain to get
+// the gcc suite. See instructions here:
 // https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation
 // Note, the instructions are old, don't put it in ~/Documents/Arduino/hardware
 // Put it in ~/Sketches/hardware/
