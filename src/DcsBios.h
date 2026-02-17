@@ -124,10 +124,9 @@ do not come with their own build system, we are just putting everything into the
 			ExportStreamListener::loopAll();			
 		}
 		bool tryToSendDcsBiosMessage(const char* msg, const char* arg) {
-			CompositeSerial.write(msg); 
-			CompositeSerial.write(' '); 
-			CompositeSerial.write(arg); 
-			CompositeSerial.write('\n');
+			char line[128];
+			int n = snprintf(line, sizeof(line), "%s %s\n", msg, arg);
+			CompositeSerial.write((uint8_t*)line, n);
 			DcsBios::PollingInput::setMessageSentOrQueued();
 			return true;
 		}
