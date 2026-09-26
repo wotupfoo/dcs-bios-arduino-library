@@ -1,0 +1,59 @@
+{
+    "configurations":  [
+                           {
+                               "name":  "Arduino",
+                               "compilerPath":  "C:/Users/edwar/AppData/Local/Arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/arm-none-eabi-g++",
+                               "compileCommands":  "${workspaceFolder}/.arduino-build/DCS-BIOS_Joystick_CompositeHID/intellisense/compile_commands.json",
+                               "includePath":  [
+                                                   "${workspaceFolder}/**",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/hardware/Arduino_STM32/STM32F1/system/libmaple",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/hardware/Arduino_STM32/STM32F1/system/libmaple/include",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/hardware/Arduino_STM32/STM32F1/system/libmaple/stm32f1/include",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/hardware/Arduino_STM32/STM32F1/system/libmaple/usb/stm32f1",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/hardware/Arduino_STM32/STM32F1/system/libmaple/usb/usb_lib",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/hardware/Arduino_STM32/STM32F1/cores/maple",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/hardware/Arduino_STM32/STM32F1/variants/generic_stm32f103c",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/hardware/Arduino_STM32/STM32F1/libraries/USBComposite",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/hardware/Arduino_STM32/STM32F1/libraries/STM32ADC",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/hardware/Arduino_STM32/STM32F1/libraries/Servo/src",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/libraries/DCS-BIOS/src",
+                                                   "G:/My Drive/EmbeddedElectronics/Arduino/libraries/EdgeLogic/src"
+                                               ],
+                               "defines":  [
+                                            "DEBUG_LEVEL=DEBUG_NONE",
+                                            "BOARD_generic_stm32f103c",
+                                            "VECT_TAB_ADDR=0x8000000",
+                                            "ERROR_LED_PORT=GPIOC",
+                                            "ERROR_LED_PIN=13",
+                                            "F_CPU=72000000L",
+                                            "ARDUINO=10607",
+                                            "ARDUINO_GENERIC_STM32F103C",
+                                            "ARDUINO_ARCH_STM32F1",
+                                            "CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG=1",
+                                            "SERIAL_USB",
+                                            "GENERIC_BOOTLOADER",
+                                            "MCU_STM32F103C6",
+                                            "__STM32F1__",
+                                            "MCU_STM32F103C6",
+                                            "__STM32F1__ "
+                                           ],
+                               "compilerArgs":  [
+                                                    "-g",
+                                                    "-Os",
+                                                    "-ffunction-sections",
+                                                    "-fdata-sections",
+                                                    "-nostdlib",
+                                                    "--param max-inline-insns-single=500",
+                                                    "-fno-rtti",
+                                                    "-fno-exceptions",
+                                                    "-fno-use-cxa-atexit",
+                                                    "-mcpu=cortex-m3",
+                                                    "-mthumb",
+                                                    "-march=armv7-m"
+                                                ],
+                               "cStandard":  "gnu11",
+                               "cppStandard":  "gnu++11"
+                           }
+                       ],
+    "version":  4
+}
