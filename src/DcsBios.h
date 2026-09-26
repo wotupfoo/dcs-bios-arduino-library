@@ -100,18 +100,31 @@ do not come with their own build system, we are just putting everything into the
 		}
 	}
 #elif defined(DCSBIOS_USBCOMPOSITE_STM32F1_SERIAL)
-// Requires https://github.com/arpruss/USBComposite_stm32f1
-// Which is now bundled in the RogerClark STM32F1 Board support,
-// so just install that since you need it for the Board Support Package anyhow
-// USBComposite is in
-// .\hardware\Arduino_STM32\STM32F1\libraries\USBComposite
-// NOTE:- You also need to install the Atmel SAM (Cortex-C) Board Toolchain to get
-// the gcc suite. See instructions here:
-// https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation
-// Note, the instructions are old, don't put it in ~/Documents/Arduino/hardware
-// Put it in ~/Sketches/hardware/
-// See github Issue: https://github.com/rogerclarkmelbourne/Arduino_STM32/issues/939
-#include <USBComposite.h>
+	#if !defined(ARDUINO_GENERIC_STM32F103C)
+	#error "This USB Composite device creating Joystick+Serial on the same device is only supported on Arduino Bluepill STM32F103C with the Roger Clark/Maple Toolchain"
+	#endif
+	// This port allows for a Composite USB device - a single USB port that is multiple devices
+	//         eg. Joystick + DCS-BIOS Serial
+	//
+	// Hardware requirement - Arduino Bluepill STM32F103C6 (32k flash) or STM32F103C8 (64k flash)
+	//
+	// Tl;Dr - You need to install the "STM32duino" _AND_ the Roger Clark/Maple "Arduino_STM32" target toolchains
+	//
+	//         You can install STM32duino by adding the following link in the ArduinoIDE->Preferences->Additional Board Manager URLs:
+	//		   https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json
+	// 		   Then in the Board Manager install "STM32duino".
+	//
+	//		   To install the Roger Clark/Maple Board package you need to download the ZIP from:
+	//		   https://github.com/rogerclarkmelbourne/Arduino_STM32/archive/refs/tags/v1.0.0.zip
+	//		   Unzip it into your Arduino sketch directory under ./hardware/Arduino_STM32 (note the drop of the _1.0.0 at the end)
+	//         Then use this Fully Qualified Board Name (FQBN)
+	//		   !TIP! Put this in a sketch.yaml next your sketch to automate it.
+	//		   default_fqbn: Arduino_STM32:STM32F1:genericSTM32F103C:upload_method=STLinkMethod
+	//
+	// This makes it possible to create a device that has Joystick-only (eg flight stick controls) elements that DCS-BIOS
+	// doesn't support as well as DCS-BIOS inputs that are not supported over Joystick (eg analog wheel brake) config in DCS.
+	// You can also have DCS outputs! So indicators that don't necessarily match the button state can be implemented.
+	#include <USBComposite.h>
 	namespace DcsBios {
 		ProtocolParser parser;
 		void setup() {
@@ -124,6 +137,7 @@ do not come with their own build system, we are just putting everything into the
 			ExportStreamListener::loopAll();			
 		}
 		bool tryToSendDcsBiosMessage(const char* msg, const char* arg) {
+			// Collapsed to a single line so it is tranmitted as a single USB packet to reduce thrashing
 			char line[128];
 			int n = snprintf(line, sizeof(line), "%s %s\n", msg, arg);
 			CompositeSerial.write((uint8_t*)line, n);
